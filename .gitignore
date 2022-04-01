@@ -1,0 +1,26 @@
+# Default ignored files
+/shelf/
+/.idea/workspace.xml
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+/target/
+/build/
+/nbproject/private/
+/eclipse/
+/.gradle/
+/.idea/
+/out/
+/.settings/
+/.apt_generated/
+/.apt_generated_tests/
+/bin/
+*.log
+/.classpath
+/.factorypath
+/.project
+*.iml
+/nbactions.xml
+/dependency-reduced-pom.xml
