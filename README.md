@@ -1,9 +1,9 @@
-#H1 Abschlussprojekt Web-Technologien HS2021
+# Abschlussprojekt Web-Technologien HS2021
 
 Diese Applikation wurde im Rahmen des Moduls Web-Technologien als Abschlussprojekt erstellen und bewertet.
 Die Web-Applikation dient dazu einfache Berechnungen von Dreiecken und Rechtecken zu machen.
 
-#H2 Verwendung
+## Verwendung
 Die Applikation wurde mithilfe des lokalen Webservers XAMPP 8.0.10 entwickelt.
 Dieser kann unter installiert werden: [XAMPP Download](https://sourceforge.net/projects/xampp/)
 
