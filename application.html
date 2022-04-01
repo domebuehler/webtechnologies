@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="css/stylesheet.css">
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+
+    <title>Formen-Berechner</title>
+</head>
+
+<body class="w3-pale-green">
+
+    <header id="header" class="w3-container w3-teal">
+        <h2>Formen-Berechner</h2>
+        <nav class="w3-bar w3-teal">
+            <a href="#informationsTeil" class="w3-bar-item w3-button w3-mobile">Info</a>
+            <a href="#formularTeil" class="w3-bar-item w3-button w3-mobile">Berechungsformular</a>
+            <a href="#canvasTeil" class="w3-bar-item w3-button w3-mobile">Canvas</a>
+        </nav>
+    </header>
+
+    <section id="content">
+
+        <div class="w3-row">
+
+            <div class="w3-col l6">
+                <article id="informationTeil" class="w3-row l6">
+                    <div class="w3-container w3-teal w3-margin">
+                        <h3 id="info">Info</h3>
+                    </div>
+                    <p class="w3-margin">Diese Applikation dient dazu die Fläche wie auch den
+                        Umfang von einem Rechteck oder einem gleichschenkligen Dreieck zu berechnen.</p>
+                    <p class="w3-margin">Um korrekte Resultate zu erhalten und die Applikation verwenden zu können
+                        müssen folgende Punkte beachtet werden:</p>
+
+                    <ul id="hinweisliste">
+                        <li v-for="item in hinweise" :key="item.message">
+                            {{item.message}}
+                        </li>
+                    </ul>
+
+                    <div class="w3-container w3-center">
+                        <img alt="Erklärung zum gleichschenkligen Dreieck" class="w3-margin" src="./img/dreieck.png">
+                    </div>
+                </article>
+            </div>
+            <div class="w3-col l6">
+                <article id="formularTeil">
+                    <div class="w3-container w3-teal w3-margin">
+                        <h3>Berechungsformular</h3>
+                    </div>
+                    <form name="formularBerechner" id="formular" class="w3-container" action="./action.php"
+                        method="post" onsubmit="return valdidateCheckboxes();">
+                        <fieldset class="w3-margin">
+                            <legend>
+                                <h4 class="w3-margin w3-teal w3-tag">Form</h4>
+                            </legend>
+                            <input v-model="geometrischeForm" name="geometrischeForm" id="r1" type="radio"
+                                value="rechteck" class="w3-radio" />
+                            <label for="r1">Rechteck</label>
+                            <br />
+                            <input v-model="geometrischeForm" name="geometrischeForm" id="r2" type="radio"
+                                value="dreieck" class="w3-radio" />
+                            <label for="r2">Dreieck</label>
+                        </fieldset>
+
+                        <fieldset class="w3-margin">
+                            <legend>
+                                <h4 class="w3-margin w3-teal w3-tag">Berechnungsart</h4>
+                            </legend>
+                            <p class="w3-hide" id="fehlermeldung">Es muss mindestens eine Berechnungsart gewählt werden!
+                            </p>
+                            <input name="berechneFlaeche" id="berechneFlaeche" type="checkbox" value="berechneFlaeche"
+                                class="w3-check" />
+                            <label for="berechneFlaeche">Fläche</label>
+                            <br />
+                            <input name="berechneUmfang" id="berechneUmfang" type="checkbox" value="berechneUmfang"
+                                class="w3-check" />
+                            <label for="berechneUmfang">Umfang</label>
+                        </fieldset>
+
+                        <fieldset class="w3-margin">
+                            <legend>
+                                <h4 class="w3-margin w3-teal w3-tag">Einheit</h4>
+                            </legend>
+                            <select v-model="einheit" id="einheit" name="einheiten">
+                                <option value="bitteWaehlen">Bitte wählen</option>
+                                <option value="m">Meter</option>
+                                <option value="cm">Centimeter</option>
+                                <option value="mm">Millimeter</option>
+                            </select>
+
+                        </fieldset>
+
+                        <fieldset v-if="geometrischeForm == 'rechteck'" class="w3-margin">
+                            <legend>
+                                <h4 class="w3-margin w3-teal w3-tag">Seitenlängen</h4>
+                            </legend>
+                            <label for="seiteA">Seitenlänge a</label><br />
+                            <input name="seiteA" id="seiteA" type="number" value=""
+                                class="w3-input w3-light-grey w3-border" max="999" min="1" required>
+                            <br />
+                            <label for="seiteB">Seitenlänge b</label><br />
+                            <input name="seiteB" id="seiteB" type="number" value=""
+                                class="w3-input w3-light-grey w3-border" max="999" min="1" required>
+                        </fieldset>
+
+                        <fieldset v-if="geometrischeForm == 'dreieck'" class="w3-margin">
+                            <legend>
+                                <h4 class="w3-margin w3-teal w3-tag">Grundlinie und Höhe</h4>
+                            </legend>
+                            <label for="grundlinie">Grundlinie</label><br />
+                            <input name="grundlinie" id="grundlinie" type="number" value=""
+                                class="w3-input w3-light-grey w3-border" max="999" min="1" required>
+                            <br />
+                            <label for="hoehe">Höhe</label><br />
+                            <input name="hoehe" id="hoehe" type="number" value=""
+                                class="w3-input w3-light-grey w3-border" max="999" min="1" required>
+                        </fieldset>
+
+                        <button v-bind:disabled="einheit == 'bitteWaehlen'" id="calculateButton"
+                            class="w3-margin w3-button w3-large w3-teal w3-hover-green" type="submit">Berechnen</button>
+                    </form>
+                </article>
+            </div>
+        </div>
+
+        <div class="w3-row">
+            <div class="w3-col l6">
+                <article id="canvasTeil">
+                    <div class="w3-container w3-teal w3-margin">
+                        <h3>Canvas</h3>
+                    </div>
+                    <canvas id="myCanvas" width="305px" height="305px"></canvas>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <footer class="w3-margin">
+        <p>Created by Dominik Bühler</p>
+        <p><a href="#header">Zurück zum Anfang</a></p>
+    </footer>
+
+    <script src="js/formularScript.js"></script>
+    <script src="js/clientScript.js"></script>
+    <script src="js/canvasScript.js"></script>
+</body>
+
+</html>
